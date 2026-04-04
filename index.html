@@ -275,43 +275,90 @@ margin-top:40px;
 
 
 <script>
+let cart = [];
 
-let cart=[];
+// Item prices
+const prices = {
+  "Espresso": 5.00,
+  "Caffe Latte": 4.85,
+  "Cappuccino": 5.50,
+  "Americano": 3.80,
+  "Mocha": 6.50,
+  "Iced Coffee": 4.00,
+  "Cold Brew": 5.90,
+  "Flat White": 5.20,
+  "Chocolate Cake": 10.00,
+  "Cheesecake": 12.00,
+  "Red Velevet Cake": 9.00,
+  "Carrot Cake": 10.00,
+  "Butter Croissant": 4.00,
+  "Chocolate Croissant": 6.00,
+  "Almond Croissant": 5.80,
+  "Orange Juice": 7.00,
+  "Mango Juice": 8.00,
+  "Apple Juice": 9.50,
+  "Chocolate Pastry": 5.60,
+  "Strawberry Pastry": 6.30,
+  "Vanilla Pastry": 6.90,
+  "Blueberry Muffin": 4.80,
+  "Chocolate Muffin": 5.00,
+  "Chocolate Brownie": 5.60,
+  "Chicken Sandwich": 8.00,
+  "Cheese Sandwich": 10.00,
+  "Cola": 1.99,
+  "Lemon Soda": 2.10
+};
 
 function addToCart(item){
-cart.push(item);
-updateCart();
-alert(item+" added to cart");
+  cart.push(item);
+  updateCart();
+  alert(item + " added to cart");
+}
+
+function removeFromCart(index){
+  cart.splice(index, 1);
+  updateCart();
 }
 
 function updateCart(){
-let list=document.getElementById("cartItems");
-list.innerHTML="";
+  let list = document.getElementById("cartItems");
+  let total = 0;
+  list.innerHTML = "";
 
-cart.forEach(i=>{
-let li=document.createElement("li");
-li.textContent=i;
-list.appendChild(li);
-});
+  cart.forEach((item, index) => {
+    let li = document.createElement("li");
+    li.textContent = item + " - $" + prices[item].toFixed(2) + " ";
+
+    let removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.onclick = () => removeFromCart(index);
+
+    li.appendChild(removeBtn);
+    list.appendChild(li);
+
+    total += prices[item];
+  });
+
+  document.getElementById("totalPrice").textContent = total.toFixed(2);
+  document.getElementById("itemCount").textContent = cart.length;
 }
 
 function placeOrder(){
+  let name = document.getElementById("name").value;
+  let address = document.getElementById("address").value;
+  let payment = document.getElementById("payment").value;
 
-let name=document.getElementById("name").value;
-let address=document.getElementById("address").value;
-let payment=document.getElementById("payment").value;
-
-alert(
-"ORDER SUMMARY\n\n"+
-"Name: "+name+"\n"+
-"Items: "+cart.join(", ")+"\n"+
-"Address: "+address+"\n"+
-"Payment: "+payment
-);
-
+  alert(
+    "ORDER SUMMARY\n\n" +
+    "Name: " + name + "\n" +
+    "Items: " + cart.join(", ") + "\n" +
+    "Address: " + address + "\n" +
+    "Payment: " + payment + "\n" +
+    "Total Price: $" + cart.reduce((sum, i) => sum + prices[i], 0).toFixed(2)
+  );
 }
-
 </script>
+
 
 </body>
 </html>
